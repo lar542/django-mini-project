@@ -1,0 +1,30 @@
+{% extends 'board/navbar.html' %}
+{% block content %}
+<div class="container" style="max-width: 540px;">
+    <div class="row" style="margin-top:20px;">
+        <div class="col-sm-12">
+            <div class="card border-secondary">
+              <div class="card-body">
+                  <form method="post" action="{% url 'user:join' %}">
+                      {% csrf_token %}
+                      {% for field in form %}
+                        <div class="form-group">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            <input type="{{ field.field.widget.input_type }}"
+                                   class="form-control {% if field.errors|length > 0 %}is-invalid{% endif %}"
+                                   id="{{ field.id_for_label }}"
+                                   name="{{ field.html_name }}"
+                                   value="{{ field.value|default_if_none:'' }}">
+                            {% for error in field.errors %}
+                                <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                      {% endfor %}
+                      <button type="submit" class="btn btn-primary btn-lg btn-block">가입</button>
+                    </form>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

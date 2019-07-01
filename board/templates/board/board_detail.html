@@ -1,0 +1,56 @@
+{% extends 'board/navbar.html' %}
+{% block content %}
+<div class="container">
+  <div class="row" style="margin:20px auto;">
+    <div class="col-sm-12">
+      <div class="card border-secondary">
+        <h5 class="card-header">{{ board.title }}</h5>
+        <div class="card-body">
+          <h5 class="card-title">작성자 {{ board.username }}</h5>
+          <p class="card-text">{{ board.content }}</p>
+          <footer class="blockquote-footer"><cite title="Source Title">{{ board.created_at }}</cite></footer>
+          <a href="#" class="btn btn-primary">별점</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="row" style="margin:20px auto;">
+        <div class="col-sm-12">
+          <div class="alert alert-danger">
+            <strong>{{ message.tags }}!</strong> {{ message.message }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
+  <div class="row" style="margin:20px auto;">
+    <div class="col-sm-12">
+      <div class="card">
+        <form method="post" action="{% url 'board:comment-write' %}">
+          <div class="card-body">
+            {% csrf_token %}
+            <input type="text" name="username">
+            <input type="text" name="board" value="{{ board.id }}">
+            <textarea class="form-control" id="content" name="content" rows="2" style="width: 90%; float: left;"></textarea>
+            <input class="btn btn-info btn-lg" style="float: left; margin: 0 10px;" type="submit" value="저장">
+          </div>
+          </form>
+      </div>
+    </div>
+  </div>
+  <div class="row" style="margin:20px auto;">
+    <div class="col-sm-12">
+      <ul class="list-group">
+      {% for comment in comments %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ comment.content }} - {{ comment.username }}
+          <span class="badge badge-primary badge-pill">14</span>
+        </li>
+      {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

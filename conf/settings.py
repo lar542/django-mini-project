@@ -140,3 +140,11 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+
+# 로그인이 되어있지 않은 경우 로그인 페이지로 리다이렉트하는 url
+LOGIN_URL = '/user/login/'
+
+# 로그인 시 리다이렉트하는 url
+LOGIN_REDIRECT_URL = '/board/'
+
+

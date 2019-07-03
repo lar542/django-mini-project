@@ -1,0 +1,18 @@
+{% extends 'board/navbar.html' %}
+{% block content %}
+<div class="container" style="max-width: 540px;">
+    <div class="row" style="margin-top:20px;">
+        <div class="col-sm-12">
+            <div class="card border-secondary">
+              <div class="card-body">
+                  <form method="post" action="{% url 'board:delete' pk=board.id %}">
+                      {% csrf_token %}
+                      <h5 class="card-title">정말로 삭제하시겠습니까?</h5>
+                      <button type="submit" class="btn btn-outline-danger btn-block">삭제하겠습니다.</button>
+                  </form>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

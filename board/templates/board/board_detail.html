@@ -1,15 +1,99 @@
 {% extends 'board/navbar.html' %}
 {% block content %}
 <div class="container">
+  <div class="row">
+    <div class="col-sm-12" style="margin-top:20px;">
+      <h3>{{ board.title }}</h3>
+      <p>작성자 {{ board.username }}</p>
+      <pre>{{ board.content }}</pre>
+      <footer class="blockquote-footer"><cite title="Source Title">{{ board.created_at }}</cite></footer>
+      <br>
+
+        {% if board.username == request.user.username %}
+          <div class="btn-group">
+            <a href="{% url 'board:update' pk=board.id %}">
+              <button class="btn btn-warning">수정</button>
+            </a>
+            <a href="{% url 'board:delete' pk=board.id %}">
+              <button class="btn btn-danger">삭제</button>
+            </a>
+          </div>
+        {% endif %}
+
+        <hr>
+
+        <form method="post" action="">
+            <div class="btn-group">
+              <select class="form-control">
+                  <option>추천</option>
+                  <option value="5">★★★★★</option>
+                  <option value="4">★★★★☆</option>
+                  <option value="3">★★★☆☆</option>
+                  <option value="2">★★☆☆☆</option>
+                  <option value="1">★☆☆☆☆</option>
+              </select>
+              <button class="btn btn-primary">점수주기</button>
+            </div>
+        </form>
+
+      <hr>
+
+      <form method="post" action="{% url 'board:comment-write' board_id=board.id %}">
+          <div class="card mb-3">
+              {% csrf_token %}
+              <div class="card-header">
+                  <button type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true">
+                        <input type="submit" class="btn btn-success btn-sm" value="댓글 등록">
+                    </span>
+                  </button>
+              </div>
+              <input type="text" name="username" value="{{ request.user.username }}">
+              <input type="text" name="board" value="{{ board.id }}">
+              <div class="card-body">
+                <textarea class="form-control" id="content" name="content" rows="2"></textarea>
+                  {% for message in messages %}
+                    <p>{{ message.message }}</p>
+                  {% endfor %}
+              </div>
+          </div>
+      </form>
+
+      <hr>
+
+      {% for comment in comments %}
+      <div class="card bg-light mb-3">
+          <div class="card-header">
+              <b>{{ comment.username }}</b>
+              {% if comment.username == request.user.username %}
+              <a href="{% url 'board:comment-delete' board_id=board.id comment_id=comment.id %}">
+                  <button type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+              </a>
+              {% endif %}
+          </div>
+          <div class="card-body">
+              <pre class="card-text">{{ comment.content }}</pre>
+              <footer class="blockquote-footer"><cite title="Source Title">{{ comment.created_at }}</cite></footer>
+          </div>
+      </div>
+      {% endfor %}
+
+    </div>
+  </div>
+</div>
+
+<!--
+<div class="container">
   <div class="row" style="margin:20px auto;">
     <div class="col-sm-12">
       <div class="card border-secondary">
         <h5 class="card-header">{{ board.title }}</h5>
         <div class="card-body">
           <h5 class="card-title">작성자 {{ board.username }}</h5>
-          <p class="card-text">{{ board.content }}</p>
+          <pre class="card-text">{{ board.content }}</pre>
           <footer class="blockquote-footer"><cite title="Source Title">{{ board.created_at }}</cite></footer>
-          <a href="#" class="btn btn-primary">별점</a>
         </div>
       </div>
     </div>
@@ -28,10 +112,10 @@
   <div class="row" style="margin:20px auto;">
     <div class="col-sm-12">
       <div class="card">
-        <form method="post" action="{% url 'board:comment-write' %}">
+        <form method="post" action="">
           <div class="card-body">
             {% csrf_token %}
-            <input type="text" name="username">
+            <input type="text" name="username" value="{{ request.user.username }}">
             <input type="text" name="board" value="{{ board.id }}">
             <textarea class="form-control" id="content" name="content" rows="2" style="width: 90%; float: left;"></textarea>
             <input class="btn btn-info btn-lg" style="float: left; margin: 0 10px;" type="submit" value="저장">
@@ -45,12 +129,13 @@
       <ul class="list-group">
       {% for comment in comments %}
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          {{ comment.content }} - {{ comment.username }}
-          <span class="badge badge-primary badge-pill">14</span>
+          {{ comment.content }}
+          <span class="badge badge-primary badge-pill">작성자 {{ comment.username }}</span>
         </li>
       {% endfor %}
       </ul>
     </div>
   </div>
 </div>
+-->
 {% endblock %}

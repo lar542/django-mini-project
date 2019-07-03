@@ -18,15 +18,15 @@ class BoardForm(ModelForm):
         }
         error_message = {
             'title': {
-                'max_length': _('제목은 200자 이하로 작성해주세요.')
+                'max_length': _('제목은 50자 이하로 작성해주세요.')
             },
             'content': {
-                'max_length': _('내용은 1000자 이하로 작성해주세요.')
+                'max_length': _('내용은 500자 이하로 작성해주세요.')
             },
-            'username': _('사용자 아이디는 필수 값 입니다.')
         }
         widgets = {
-            'username': forms.HiddenInput()
+            'username': forms.HiddenInput(),
+            'content': forms.Textarea()
         }
 
 
@@ -39,6 +39,11 @@ class CommentForm(ModelForm):
         }
         help_text = {
             'content': _('내용을 입력해주세요.')
+        }
+        error_message = {
+            'content': {
+                'max_length': _('댓글은 300자 이하로 작성해주세요.')
+            }
         }
         widgets = {
             'board': forms.HiddenInput(),

@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 
 class IndexView(generic.ListView):
     context_object_name = 'boards'
-    paginate_by = 10 # 한 페이지에 10개 조회
+    paginate_by = 5 # 한 페이지에 5개 조회
 
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
@@ -32,8 +32,21 @@ class IndexView(generic.ListView):
 
 class WriteView(generic.CreateView):
     model = Board
-    fields = ['title', 'content', 'username']
+    form_class = BoardForm
     success_url = '/board/'
+
+
+class UpdateView(generic.UpdateView):
+    model = Board
+    form_class = BoardForm
+    success_url = '/board/'
+    template_name_suffix = '_update'
+
+
+class DeleteView(generic.DeleteView):
+    model = Board
+    success_url = '/board/'
+    template_name_suffix = '_delete'
 
 
 class DetailView(generic.DetailView):
@@ -46,19 +59,36 @@ class DetailView(generic.DetailView):
         return context
 
 
-class CommentWrite(generic.CreateView):
-    model = Comment
-    fields = ['board', 'username', 'content']
-    template_name = 'board/board_detail.html'
+# class CommentWrite(generic.CreateView):
+#     model = Comment
+#     fields = ['board', 'username', 'content']
+#     template_name = 'board/board_detail.html'
+#
+#     def form_invalid(self, form):
+#         messages.error(self.request, '댓글을 입력해주세요!', extra_tags='danger')
+#         return HttpResponseRedirect(self.get_success_url())
+#
+#     def form_valid(self, form):
+#         form.save()
+#         return HttpResponseRedirect(self.get_success_url())
+#
+#     def get_success_url(self):
+#         return '/board/' + self.request.POST.get('board')
 
-    def form_invalid(self, form):
-        messages.error(self.request, '댓글을 입력해주세요!', extra_tags='danger')
-        return HttpResponseRedirect(self.get_success_url())
 
-    def form_valid(self, form):
-        form.save()
-        return HttpResponseRedirect(self.get_success_url())
+def comment_write(request, board_id):
+    if request.method == 'POST' and 'username' in request.POST and 'board' in request.POST:
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('board:detail', pk=board_id)
+    messages.error()
+    return redirect('board:detail', pk=board_id)
 
-    def get_success_url(self):
-        return '/board/' + self.request.POST.get('board')
+
+
+def comment_delete(request, board_id, comment_id):
+    item = get_object_or_404(Comment, pk=comment_id)
+    item.delete()
+    return redirect('board:detail', pk=board_id)
 

@@ -90,18 +90,7 @@ DATABASES = {
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+
 ]
 '''
     {
@@ -144,7 +133,19 @@ STATICFILES_DIRS = [
 # 로그인이 되어있지 않은 경우 로그인 페이지로 리다이렉트하는 url
 LOGIN_URL = '/user/login/'
 
-# 로그인 시 리다이렉트하는 url
+# 로그인 시 리다이렉트할 url
 LOGIN_REDIRECT_URL = '/board/'
 
+# 로그아웃 후 리다이렉트할 url
+LOGOUT_REDIRECT_URL = '/board/'
 
+# 세션 유효기간 설정 (초단위)
+SESSION_COOKIE_AGE = 60 * 60
+
+# 이메일
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'limarhe1234@gmail.com'
+EMAIL_HOST_PASSWORD = 'djangoemailhost'
+EMAIL_USE_TLS = True

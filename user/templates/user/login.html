@@ -4,7 +4,13 @@
     <div class="row" style="margin-top:20px;">
         <div class="col-sm-12">
             <div class="card border-secondary">
+              <div class="card-header">로그인</div>
               <div class="card-body">
+                  {% for message in messages %}
+                    <div class="form-group">
+                      <p>{{ message.message }}</p>
+                    </div>
+                  {% endfor %}
                   <form method="post" action="{% url 'user:login' %}">
                       {% csrf_token %}
                       {% for field in form %}
@@ -22,6 +28,7 @@
                       {% endfor %}
                       <button type="submit" class="btn btn-primary btn-lg btn-block">로그인</button>
                     </form>
+                    <a href="{% url 'user:resend' %}">인증이메일 재발송하기</a>
               </div>
             </div>
         </div>

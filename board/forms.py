@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from . models import Board, Comment
+from . models import Board, Comment, BoardLikePoint
 from django.utils.translation import gettext_lazy as _
 
 
@@ -49,3 +49,9 @@ class CommentForm(ModelForm):
             'board': forms.HiddenInput(),
             'username': forms.HiddenInput()
         }
+
+
+class BoardLikePointForm(ModelForm):
+    class Meta:
+        model = BoardLikePoint
+        fields = ['username', 'board', 'like_point']

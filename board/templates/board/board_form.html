@@ -4,6 +4,7 @@
     <div class="row" style="margin-top:20px;">
         <div class="col-sm-12">
             <div class="card border-secondary">
+              <div class="card-header">게시글 작성</div>
               <div class="card-body">
                   <form method="post" action="{% url 'board:write' %}">
                       {% csrf_token %}

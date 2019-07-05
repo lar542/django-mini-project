@@ -4,13 +4,13 @@
     <div class="row" style="margin-top:20px;">
         <div class="col-sm-12">
             <div class="card border-secondary">
-              <div class="card-header">회원가입</div>
+              <div class="card-header">인증 이메일 재요청</div>
               <div class="card-body">
-                  <form method="post" action="{% url 'user:join' %}">
+                  <form method="post" action="{% url 'user:resend' %}">
                       {% csrf_token %}
+                      <p>재발송할 이메일 주소를 입력해주세요.</p>
                       {% for field in form %}
                         <div class="form-group">
-                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                             <input type="{{ field.field.widget.input_type }}"
                                    class="form-control {% if field.errors|length > 0 %}is-invalid{% endif %}"
                                    id="{{ field.id_for_label }}"
@@ -21,7 +21,7 @@
                             {% endfor %}
                         </div>
                       {% endfor %}
-                      <button type="submit" class="btn btn-primary btn-lg btn-block">가입</button>
+                      <button type="submit" class="btn btn-primary btn-lg btn-block">인증 이메일 보내기</button>
                     </form>
               </div>
             </div>

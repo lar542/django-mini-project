@@ -4,9 +4,9 @@
     <div class="row" style="margin-top:20px;">
         <div class="col-sm-12">
             <div class="card border-secondary">
-              <div class="card-header">회원가입</div>
+              <div class="card-header">댓글 작성</div>
               <div class="card-body">
-                  <form method="post" action="{% url 'user:join' %}">
+                  <form method="post" action="">
                       {% csrf_token %}
                       {% for field in form %}
                         <div class="form-group">

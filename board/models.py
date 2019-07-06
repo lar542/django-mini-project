@@ -26,12 +26,3 @@ class Comment(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-
-class CommentLikeCnt(models.Model):
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
-    username = models.CharField(max_length=10)
-    like_cnt = models.IntegerField(default=1)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)

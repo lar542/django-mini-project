@@ -5,6 +5,7 @@ from . forms import BoardForm, CommentForm, BoardLikePointForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from conf import settings
+from django.db.models import Count, Avg
 
 
 class IndexView(generic.ListView):
@@ -26,10 +27,16 @@ class IndexView(generic.ListView):
             end_index = max_index
 
         context['page_range'] = paginator.page_range[start_index:end_index]
+
+        # 추천 수가 가장 높은 3개
+        context['hot_boards'] = Board.objects.annotate(average_like=Avg('boardlikepoint__like_point')).exclude(
+            average_like=None).order_by('-average_like')[:3]
         return context
 
     def get_queryset(self):
-        return Board.objects.order_by('-created_at')
+        return Board.objects.order_by('-created_at')\
+                .annotate(comments_count=Count('comment'))\
+                .annotate(average_like=Avg('boardlikepoint__like_point'))
 
 
 # 게시글 작성
@@ -101,6 +108,7 @@ def comment_write(request, board_id):
     return redirect('board:detail', pk=board_id)
 
 
+# 댓글 삭제
 def comment_delete(request, board_id, comment_id):
     item = get_object_or_404(Comment, pk=comment_id)
     item.delete()

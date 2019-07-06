@@ -1,6 +1,23 @@
 {% extends 'board/navbar.html' %}
 {% block content %}
 <div class="container">
+
+    <div class="row" style="margin:20px auto;">
+        <div class="col-sm-12">
+            <div class="card border-secondary">
+                <div class="card-header"><h5>HOT</h5></div>
+                <div class="card-body text-danger">
+                    {% for board in hot_boards %}
+                        <p class="card-text" style="margin-bottom: 0;">
+                            <a href="{% url 'board:detail' board.id %}">{{ board.title }} [{{ board.average_like }}]</a>
+                        </p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     {% for board in boards %}
     <div class="row" style="margin:20px auto;">
         <div class="col-sm-12">
@@ -8,7 +25,10 @@
               <div class="card-body">
                   <h5 class="card-title"><a href="{% url 'board:detail' board.id %}">{{ board.title }}</a></h5>
                 <h6 class="card-subtitle mb-2 text-muted">{{ board.created_at|date:"Y-m-d H:i:s" }}</h6>
-                <p class="card-text">{{ board.content }}</p>
+                <p class="card-text">
+                    <a href="{% url 'board:detail' board.id %}">{{ board.comments_count }} Comments</a> /
+                    <a href="{% url 'board:detail' board.id %}">{{ board.average_like|default_if_none:0 }} ♥</a>
+                </p>
               </div>
             </div>
          </div>

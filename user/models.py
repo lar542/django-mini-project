@@ -1,7 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager, BaseUserManager
 from django.core.mail import send_mail
 from conf import settings
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField('아이디', max_length=10, unique=True)
